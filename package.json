@@ -1,0 +1,23 @@
+{
+  "name": "uts-penyewaan-kos",
+  "version": "1.0.0",
+  "description": "UTS Angelina Salim (28421002) - Informatika",
+  "license": "ISC",
+  "author": "angelina_salim",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "prisma": "^7.8.0"
+  },
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}

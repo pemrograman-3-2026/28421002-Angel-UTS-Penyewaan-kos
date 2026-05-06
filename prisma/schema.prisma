@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Role{
+  ADMIN
+  USER
+}
+
+enum StatusKos{
+  TERSEDIA
+  PENUH
+}
+
+enum StatusPenyewaan{
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model User {
+  id_user Int @id @default(autoincrement())
+  nama String
+  username String @unique
+  email String @unique
+  password String
+  no_telp String
+  role Role @default(USER) 
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  penyewaan Penyewaan[]
+  @@map("users")
+}
+
+model Kos {
+  id_kos Int @id @default(autoincrement())
+  nama_kos String
+  alamat String 
+  harga Int 
+  fasilitas String
+  status StatusKos @default(TERSEDIA) 
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  penyewaan Penyewaan[]
+  @@map("kos")
+}
+
+model Penyewaan {
+  id_sewa Int @id @default(autoincrement())
+  id_user Int
+  id_kos Int 
+  tanggal_sewa DateTime 
+  durasi_sewa Int
+  status_penyewaan StatusPenyewaan @default(PENDING) 
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user User @relation(fields: [id_user], references: [id_user])
+  kos Kos @relation(fields: [id_kos], references: [id_kos])
+  @@map("penyewaan")
+}
