@@ -4,9 +4,9 @@ import { deleteUser, getAllUser, getUserById, login, register, updateUser } from
 const router = express.Router()
 router.post('/register', register)
 router.post('/login', login)
-router.get('/', getAllUser)
-router.get('/by-id', getUserById)
-router.put('/update', updateUser)
-router.delete('/delete', deleteUser)
+router.get('/get-all', getAllUser)
+router.get('/get/:id', getUserById)
+router.put('/update/:id', updateUser)
+router.delete('/delete/:id', deleteUser)
 
 export default router

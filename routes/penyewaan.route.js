@@ -3,9 +3,9 @@ import { createSewa, deleteSewa, getAllSewa, getSewaById, updateSewa } from "../
 
 const router = express.Router()
 router.post('/create', createSewa)
-router.get('/', getAllSewa)
-router.get('/by-id', getSewaById)
-router.put('/update', updateSewa)
-router.delete('/delete', deleteSewa)
+router.get('/get-all', getAllSewa)
+router.get('/get/:id', getSewaById)
+router.put('/update/:id', updateSewa)
+router.delete('/delete/:id', deleteSewa)
 
 export default router

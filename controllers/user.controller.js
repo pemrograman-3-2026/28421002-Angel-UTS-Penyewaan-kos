@@ -83,29 +83,28 @@ export const login = async (req, res) => {
 }
 
 export const getAllUser = async (req, res) => {
-    const users = await prisma.user.findMany()
-
-    const dataUser = users.map((user) => ({
-        id_user: user.id_user,
-        nama: user.nama,
-        username: user.username,
-        email: user.email,
-        no_telp: user.no_telp,
-        role: user.role
-    }))
-
+    const users = await prisma.user.findMany({
+        select: {
+            id_user: true,
+            nama: true,
+            username: true,
+            email: true,
+            no_telp: true,
+            role: true   
+        }
+    })
     res.json({
         message: 'Get all users successful',
-        data: dataUser
+        data: users
     })
 }
 
 export const getUserById = async (req, res) => {
-    const body = req.body
+    const idUser = req.params.id
 
     const user = await prisma.user.findUnique({
         where: {
-            id_user:  Number(body.id_user)
+            id_user:  Number(idUser)
         }
     })
 
@@ -129,11 +128,12 @@ export const getUserById = async (req, res) => {
 }
 
 export const updateUser = async (req, res) => {
+    const idUser = Number(req.params.id)
     const body = req.body
 
     const isUserExist = await prisma.user.findUnique({
         where: {
-            id_user: Number(body.id_user)
+            id_user: Number(idUser)
         }
     })
 
@@ -147,14 +147,14 @@ export const updateUser = async (req, res) => {
 
     const user = await prisma.user.update({
         where: {
-            id_user: Number(body.id_user)
+            id_user: idUser
         },
-        data:{
+        data: {
             nama: body.nama,
             username: body.username,
             email: body.email,
             password: hashPassword,
-            no_telp: body.no_telp
+            no_telp: body.no_telp,
         }
     })
 
@@ -172,11 +172,11 @@ export const updateUser = async (req, res) => {
 }
 
 export const deleteUser = async (req, res) => {
-    const body = req.body
+    const idUser = Number(req.params.id)
 
     const isUserExist = await prisma.user.findUnique({
         where: {
-            id_user:  Number(body.id_user)
+            id_user:  Number(idUser)
         }
     })
 
@@ -188,7 +188,7 @@ export const deleteUser = async (req, res) => {
 
     await prisma.user.delete({
         where: {
-            id_user: Number(body.id_user)
+            id_user: idUser
         }
     })
 

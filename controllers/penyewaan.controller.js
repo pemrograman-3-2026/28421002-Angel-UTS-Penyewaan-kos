@@ -25,7 +25,13 @@ export const createSewa = async (req, res) => {
         return res.status(404).json({
             message:'Kos not found'
         })
-    }        
+    }
+
+    if (isKosExist.status === 'PENUH'){
+        return res.status(400).json({
+            message: 'Kos is full'
+        })
+    }
 
     const sewa = await prisma.penyewaan.create({
         data: {
@@ -44,7 +50,6 @@ export const createSewa = async (req, res) => {
 
 export const getAllSewa = async (req, res) => {
     const sewa = await prisma.penyewaan.findMany()
-
     res.json({
         message: 'Get all penyewaan successful',
         data: sewa
@@ -52,11 +57,11 @@ export const getAllSewa = async (req, res) => {
 }
 
 export const getSewaById = async (req, res) => {
-    const body = req.body
+    const idSewa = req.params.id
 
     const sewa = await prisma.penyewaan.findUnique({
         where: {
-            id_sewa:  Number(body.id_sewa)
+            id_sewa:  Number(idSewa)
         }
     })
 
@@ -73,11 +78,12 @@ export const getSewaById = async (req, res) => {
 }
 
 export const updateSewa = async (req, res) => {
+    const idSewa = Number(req.params.id)
     const body = req.body
 
     const isSewaExist = await prisma.penyewaan.findUnique({
         where: {
-            id_sewa: Number(body.id_sewa)
+            id_sewa: Number(idSewa)
         }
     })
 
@@ -95,7 +101,7 @@ export const updateSewa = async (req, res) => {
 
     if (!isUserExist) {
         return res.status(404).json({
-            message:'User not found'
+            message: 'User not found'
         })
     }
 
@@ -107,15 +113,15 @@ export const updateSewa = async (req, res) => {
 
     if (!isKosExist) {
         return res.status(404).json({
-            message:'Kos not found'
+            message: 'Kos not found'
         })
     }
 
     const sewa = await prisma.penyewaan.update({
         where: {
-            id_sewa: Number(body.id_sewa)
+            id_sewa: idSewa
         },
-        data:{
+        data: {
             id_user: Number(body.id_user),
             id_kos: Number(body.id_kos),
             tanggal_sewa: new Date(body.tanggal_sewa),
@@ -131,11 +137,11 @@ export const updateSewa = async (req, res) => {
 }
 
 export const deleteSewa = async (req, res) => {
-    const body = req.body
+    const idSewa = Number(req.params.id)
 
     const isSewaExist = await prisma.penyewaan.findUnique({
         where: {
-            id_sewa:  Number(body.id_sewa)
+            id_sewa:  Number(idSewa)
         }
     })
 
@@ -147,7 +153,7 @@ export const deleteSewa = async (req, res) => {
 
     await prisma.penyewaan.delete({
         where: {
-            id_sewa: Number(body.id_sewa)
+            id_sewa: idSewa
         }
     })
 

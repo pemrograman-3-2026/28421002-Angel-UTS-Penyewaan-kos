@@ -19,7 +19,7 @@ export const createKos = async (req, res) => {
         data:{
             nama_kos: body.nama_kos,
             alamat: body.alamat,
-            harga: body.harga,
+            harga: Number(body.harga),
             fasilitas: body.fasilitas
         }
         })
@@ -31,8 +31,7 @@ export const createKos = async (req, res) => {
 }
 
 export const getAllKos = async (req, res) => {
-    const kos = await prisma.kos.findMany()
-
+    const kos = await prisma.kos.findMany({})
     res.json({
         message: 'Get all kos successful',
         data: kos
@@ -40,11 +39,11 @@ export const getAllKos = async (req, res) => {
 }
 
 export const getKosById = async (req, res) => {
-    const body = req.body
+    const idKos = req.params.id
 
     const kos = await prisma.kos.findUnique({
         where: {
-            id_kos:  Number(body.id_kos)
+            id_kos:  Number(idKos)
         }
     })
 
@@ -61,11 +60,12 @@ export const getKosById = async (req, res) => {
 }
 
 export const updateKos = async (req, res) => {
+    const idKos = Number(req.params.id)
     const body = req.body
 
     const isKosExist = await prisma.kos.findUnique({
         where: {
-            id_kos: Number(body.id_kos)
+            id_kos: Number(idKos)
         }
     })
 
@@ -77,12 +77,12 @@ export const updateKos = async (req, res) => {
 
     const kos = await prisma.kos.update({
         where: {
-            id_kos: Number(body.id_kos)
+            id_kos: idKos
         },
-        data:{
+        data: {
             nama_kos: body.nama_kos,
             alamat: body.alamat,
-            harga: body.harga,
+            harga: Number(body.harga),
             fasilitas: body.fasilitas,
             status: body.status
         }
@@ -95,11 +95,11 @@ export const updateKos = async (req, res) => {
 }
 
 export const deleteKos = async (req, res) => {
-    const body = req.body
+    const idKos = Number(req.params.id)
 
     const isKosExist = await prisma.kos.findUnique({
         where: {
-            id_kos:  Number(body.id_kos)
+            id_kos:  Number(idKos)
         }
     })
 
@@ -111,7 +111,7 @@ export const deleteKos = async (req, res) => {
 
     await prisma.kos.delete({
         where: {
-            id_kos: Number(body.id_kos)
+            id_kos: idKos
         }
     })
 
